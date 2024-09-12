@@ -9,18 +9,20 @@
             margin: 0;
             overflow-x: hidden; /* Ensure only vertical scroll is considered */
         }
-        .container {
-            position: relative;
+        #lottie-container {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%;
-            max-width: 100vw;
+            height: 100vh; /* Full height initially */
+            pointer-events: none;
         }
         .menu-bar {
             position: fixed;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 100%;
-            max-width: 100vw;
             height: 7vh; /* 7% of viewport height */
             background-color: red; /* Red color for the menu bar */
             color: white;
@@ -28,16 +30,8 @@
             align-items: center;
             justify-content: center;
             z-index: 10; /* Ensure it is above other content */
-        }
-        #lottie-container {
-            position: fixed;
-            top: 7vh; /* Below the menu bar */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 100vw;
-            height: calc(100vh - 7vh); /* Adjusted to fit below the menu bar */
-            pointer-events: none;
+            width: 100%; /* Default width */
+            box-sizing: border-box;
         }
         .scroll-space {
             height: 300vh; /* Creates enough space for scrolling */
@@ -46,74 +40,85 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="menu-bar">
-        <!-- Menu content goes here -->
-        Menu Bar
-    </div>
-    <div id="lottie-container"></div>
+<div class="menu-bar" id="menu-bar">
+    <!-- Menu content goes here -->
+    Menu Bar
 </div>
+<div id="lottie-container"></div>
 <div class="scroll-space"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
 <script>
-    console.log('Script loaded. Initializing Lottie animation.');
+    const lottieContainer = document.getElementById('lottie-container');
+    const menuBar = document.getElementById('menu-bar');
 
     // Load the Lottie animation JSON file
     const lottieAnimation = lottie.loadAnimation({
-        container: document.getElementById('lottie-container'),
+        container: lottieContainer,
         renderer: 'svg',
         loop: false,
         autoplay: false,
         path: 'data.json' // Path to your Lottie JSON file
     });
 
-    // Listener for when the Lottie animation DOM is loaded
+    // Function to adjust layout
+    function adjustLayout() {
+        const lottieRect = lottieContainer.getBoundingClientRect();
+        const menuBarHeight = menuBar.offsetHeight;
+
+        console.log('Adjusting layout...');
+        console.log(`Lottie container width: ${lottieRect.width}px`);
+        console.log(`Lottie container height: ${lottieRect.height}px`);
+        console.log(`Menu bar height: ${menuBarHeight}px`);
+
+        // Set menu bar width to match animation width
+        menuBar.style.width = `${lottieRect.width}px`;
+        // Position menu bar correctly relative to animation
+        menuBar.style.top = `${lottieRect.top}px`;
+
+        // Adjust animation height based on aspect ratio
+        lottieContainer.style.height = `${window.innerHeight - menuBarHeight}px`;
+        
+        console.log('Layout adjusted.');
+        console.log(`Menu bar width: ${menuBar.style.width}`);
+        console.log(`Menu bar top position: ${menuBar.style.top}`);
+        console.log(`Animation container height: ${lottieContainer.style.height}`);
+    }
+
+    // Initial adjustment
     lottieAnimation.addEventListener('DOMLoaded', () => {
         console.log('Lottie animation DOM loaded.');
+        adjustLayout();
         document.body.style.height = `${window.innerHeight * 3}px`; // Adjust scrollable height
-        console.log(`Body height set to ${document.body.style.height}`);
+    });
+
+    // Adjust layout on window resize
+    window.addEventListener('resize', () => {
+        console.log('Window resized.');
+        adjustLayout();
     });
 
     // Listener for when animation frames are ready
     lottieAnimation.addEventListener('data_ready', () => {
         console.log('Lottie data is ready, animation frames loaded.');
-        console.log(`Total frames available: ${lottieAnimation.totalFrames}`);
     });
 
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
-        console.log('Scroll event detected inside animation binding.');
         if (lottieAnimation.totalFrames > 0) {
-            console.log(`Total frames detected: ${lottieAnimation.totalFrames}`);
-
             const scrollTop = window.scrollY || window.pageYOffset;
-            console.log(`Current scroll position: ${scrollTop}`);
-            
             const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
-            console.log(`Max scrollable height: ${maxScrollTop}`);
 
             if (maxScrollTop <= 0) {
-                console.warn('Max scrollable height is zero or negative. Check scroll-space height or body height setting.');
+                console.warn('Max scrollable height is zero or negative.');
             }
 
             const scrollFraction = scrollTop / maxScrollTop;
-            console.log(`Scroll fraction (scrollTop / maxScrollTop): ${scrollFraction}`);
-
-            if (isNaN(scrollFraction) || !isFinite(scrollFraction)) {
-                console.error('Scroll fraction calculation failed, check scrollTop and maxScrollTop values.');
-                return;
-            }
-
             const frame = Math.min(
                 lottieAnimation.totalFrames * scrollFraction,
                 lottieAnimation.totalFrames - 1
             );
-            console.log(`Calculated frame to go to: ${frame}`);
             lottieAnimation.goToAndStop(frame, true);
-            console.log(`Animation updated to frame: ${frame}`);
-        } else {
-            console.error('Animation frames are not available yet or set to zero.');
         }
     });
 
