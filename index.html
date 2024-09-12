@@ -97,20 +97,11 @@
 
         if (lottieElement) {
             const lottieWidth = lottieElement.getBoundingClientRect().width;
-            const computedStyle = window.getComputedStyle(lottieElement);
-            const transformScale = computedStyle.transform || '';
-
             console.log(`Lottie Element Width: ${lottieWidth}`);
-            console.log(`Computed Style Width: ${computedStyle.width}`);
-            console.log(`Transform Scale: ${transformScale}`);
 
-            // Check if the width seems reasonable and adjust the menu bar accordingly
-            if (lottieWidth > 100 && lottieWidth < window.innerWidth) {
-                console.log(`Adjusting Menu Bar Width to: ${lottieWidth}`);
-                menuBar.style.width = `${lottieWidth}px`;
-            } else {
-                console.warn('Detected anomalously small or too large width. Skipping adjustment to avoid visual errors.');
-            }
+            // Directly adjust the menu bar width without unnecessary checks
+            console.log(`Adjusting Menu Bar Width to: ${lottieWidth}`);
+            menuBar.style.width = `${lottieWidth}px`;
         } else {
             console.error('Lottie SVG element not found. Retrying...');
         }
