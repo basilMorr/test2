@@ -90,7 +90,7 @@
         path: 'data.json' // Path to your Lottie JSON file
     });
 
-    // Adjust the width of the menu bar to match the Lottie animation
+    // Function to adjust the width of the menu bar to match the Lottie animation
     function adjustMenuBarWidth() {
         const lottieElement = document.querySelector('#lottie-container svg');
         const menuBar = document.getElementById('menu-bar');
@@ -101,27 +101,29 @@
             menuBar.style.width = `${lottieWidth}px`;
         } else {
             console.error('Lottie SVG element not found. Retrying...');
-            // Retry mechanism: attempt to find the element after a short delay
-            setTimeout(adjustMenuBarWidth, 100); // Retry after 100 milliseconds
         }
     }
 
-    // MutationObserver to detect when the Lottie SVG is added to the DOM
-    const observer = new MutationObserver((mutationsList) => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                adjustMenuBarWidth();
+    // Use ResizeObserver to monitor changes in the Lottie element's size
+    const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            if (entry.target.matches('#lottie-container svg')) {
+                adjustMenuBarWidth(); // Adjust when the Lottie element resizes
             }
         }
     });
 
-    // Observe changes to the #lottie-container to detect when the SVG is added
-    observer.observe(document.getElementById('lottie-container'), { childList: true, subtree: true });
-
-    // Lottie animation event listeners
+    // Wait for the Lottie animation to load and then start observing
     lottieAnimation.addEventListener('DOMLoaded', () => {
         console.log('Lottie animation DOM loaded.');
-        adjustMenuBarWidth(); // Adjust the menu bar width when the animation loads
+        const lottieElement = document.querySelector('#lottie-container svg');
+
+        if (lottieElement) {
+            resizeObserver.observe(lottieElement); // Start observing the Lottie element
+            adjustMenuBarWidth(); // Initial adjustment
+        } else {
+            console.error('Lottie SVG element not found after DOMLoaded.');
+        }
     });
 
     // Bind the animation playback to the scroll event
@@ -140,9 +142,8 @@
         }
     });
 
-    // Call the function on resize and load to ensure it stays matched
+    // Call the function on resize to ensure it stays matched
     window.addEventListener('resize', adjustMenuBarWidth);
-    window.addEventListener('load', adjustMenuBarWidth);
 </script>
 
 </body>
