@@ -8,16 +8,11 @@
         body {
             margin: 0;
             background-color: black; /* Set the background of the site to black */
-            overflow-x: hidden; /* Ensure only vertical scroll is considered */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
+            overflow: hidden; /* Prevent horizontal overflow */
         }
         .lottie-container {
             position: relative;
             width: 100%;
-            max-width: 1920px; /* Set the maximum width of the container */
             height: 100vh; /* Full viewport height */
             overflow: hidden;
             display: flex;
@@ -37,6 +32,8 @@
             align-items: center; /* Centers buttons vertically within the bar */
             gap: 10px; /* Space between buttons */
             background: transparent; /* Transparent background */
+            width: calc(100% - 20px); /* Adjust width to fit within the container */
+            box-sizing: border-box; /* Include padding and border in the width and height calculations */
         }
         .button-bar img {
             height: 60px; /* Resize images to 60px height */
