@@ -129,18 +129,20 @@
         }
     });
 
-    // Continuously adjust menu bar width every frame to ensure synchronization
+    // Continuous monitoring to ensure that the menu bar stays synchronized
     function monitorAnimation() {
-        console.log('MonitorAnimation called. Adjusting menu bar width.');
         adjustMenuBarWidth();
-        requestAnimationFrame(monitorAnimation); // Repeat this process every frame
+        requestAnimationFrame(monitorAnimation); // Continuously monitor the Lottie element width
     }
 
-    // Start monitoring once the Lottie element is ready
+    // Start the monitoring process when the Lottie animation is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
         console.log('Starting continuous monitoring of animation.');
         monitorAnimation();
     });
+
+    // Remove reliance on window resize events if causing conflicts
+    window.removeEventListener('resize', adjustMenuBarWidth);
 
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
@@ -158,12 +160,6 @@
         } else {
             console.error('Animation frames are not available yet or set to zero.');
         }
-    });
-
-    // Call the function on resize to ensure it stays matched
-    window.addEventListener('resize', () => {
-        console.log('Resize event detected.');
-        adjustMenuBarWidth();
     });
 </script>
 
