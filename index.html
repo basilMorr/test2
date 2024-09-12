@@ -11,8 +11,8 @@
             background-color: black; /* Set the background color to black */
             display: flex;
             justify-content: center;
+            scroll-behavior: smooth; /* Smoothens the scrolling experience */
         }
-        
         #animation-container {
             width: 100vw; /* Make it responsive with the viewport width */
             max-width: 1920px; /* Constrain to max size */
@@ -36,6 +36,8 @@
             width: 100%;
             height: 100vh; /* Adjust to fit the viewport height */
             pointer-events: none;
+            opacity: 0; /* Hide the container initially */
+            transition: opacity 0.5s ease; /* Fade-in effect */
         }
         .scroll-space {
             height: 300vh; /* Creates enough space for scrolling */
@@ -72,7 +74,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
 <script>
-  
+    console.log('Script loaded. Initializing Lottie animation.');
+
     // Load the Lottie animation JSON file
     const lottieAnimation = lottie.loadAnimation({
         container: document.getElementById('lottie-container'),
@@ -82,49 +85,50 @@
         path: 'data.json' // Path to your Lottie JSON file
     });
 
-    // Set the playback speed to half of the normal speed
-    lottieAnimation.setSpeed(0.2);
+    // Set the playback speed to slow down the animation
+    lottieAnimation.setSpeed(0.3);
+
+    // Ensure the animation starts at the first frame
+    lottieAnimation.addEventListener('DOMLoaded', () => {
+        lottieAnimation.goToAndStop(0, true); // Force start at the first frame
+        console.log('Lottie animation set to start at frame 0.');
+    });
 
     // Listener for when the Lottie animation DOM is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
-      
+        console.log('Lottie animation DOM loaded.');
         document.body.style.height = `${window.innerHeight * 3}px`; // Adjust scrollable height
-    
+        console.log(`Body height set to ${document.body.style.height}`);
     });
 
     // Listener for when animation frames are ready
     lottieAnimation.addEventListener('data_ready', () => {
-       
-    });
+        console.log('Lottie data is ready, animation frames loaded.');
+        console.log(`Total frames available: ${lottieAnimation.totalFrames}`);
 
-    // Check if scroll events are being detected globally
-    window.addEventListener('scroll', () => {
-    
-    });
-
-    // Directly check if document scrolls are detected
-    document.addEventListener('scroll', () => {
-  
+        // Show the Lottie container once it's ready
+        document.getElementById('lottie-container').style.opacity = 1;
     });
 
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
-  
+        console.log('Scroll event detected inside animation binding.');
         if (lottieAnimation.totalFrames > 0) {
-         
+            console.log(`Total frames detected: ${lottieAnimation.totalFrames}`);
 
             const scrollTop = window.scrollY || window.pageYOffset;
-         
+            console.log(`Current scroll position: ${scrollTop}`);
             
             const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
-      
+            console.log(`Max scrollable height: ${maxScrollTop}`);
 
             if (maxScrollTop <= 0) {
                 console.warn('Max scrollable height is zero or negative. Check scroll-space height or body height setting.');
             }
 
-            const scrollFraction = scrollTop / maxScrollTop;
-     
+            // Adjust the scroll fraction to ensure smooth and linear playback
+            const scrollFraction = Math.min(scrollTop / maxScrollTop, 1); // Ensures the fraction doesn't exceed 1
+            console.log(`Scroll fraction (scrollTop / maxScrollTop): ${scrollFraction}`);
 
             if (isNaN(scrollFraction) || !isFinite(scrollFraction)) {
                 console.error('Scroll fraction calculation failed, check scrollTop and maxScrollTop values.');
@@ -135,9 +139,9 @@
                 lottieAnimation.totalFrames * scrollFraction,
                 lottieAnimation.totalFrames - 1
             );
-       
+            console.log(`Calculated frame to go to: ${frame}`);
             lottieAnimation.goToAndStop(frame, true);
-          
+            console.log(`Animation updated to frame: ${frame}`);
         } else {
             console.error('Animation frames are not available yet or set to zero.');
         }
@@ -145,7 +149,7 @@
 
     // Listener to check when the animation is completely ready
     lottieAnimation.addEventListener('complete', () => {
-    
+        console.log('Lottie animation has completed playback.');
     });
 </script>
 
