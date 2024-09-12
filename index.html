@@ -15,9 +15,6 @@
             width: 100%;
             height: 100vh; /* Full viewport height */
             overflow: hidden;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
         }
         #lottie-container {
             width: 100%;
@@ -29,11 +26,12 @@
             right: 10px;
             height: 70px; /* Height of the black bar */
             display: flex;
-            align-items: center; /* Centers buttons vertically within the bar */
+            align-items: center; /* Center buttons vertically within the bar */
+            flex-direction: column; /* Stack buttons vertically */
             gap: 10px; /* Space between buttons */
             background: transparent; /* Transparent background */
-            width: calc(100% - 20px); /* Adjust width to fit within the container */
-            box-sizing: border-box; /* Include padding and border in the width and height calculations */
+            width: 60px; /* Width to fit within the Lottie container */
+            box-sizing: border-box; /* Include padding and border in width calculations */
         }
         .button-bar img {
             height: 60px; /* Resize images to 60px height */
