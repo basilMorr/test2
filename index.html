@@ -11,6 +11,7 @@
             background-color: black; /* Set the background color to black */
             display: flex;
             justify-content: center;
+            scroll-behavior: smooth; /* Smoothens the scrolling experience */
         }
         #animation-container {
             width: 100vw; /* Make it responsive with the viewport width */
@@ -117,9 +118,9 @@
                 console.warn('Max scrollable height is zero or negative. Check scroll-space height or body height setting.');
             }
 
-            // Adjust the scroll fraction further or slow down the speed as needed
-            const scrollFraction = (scrollTop / maxScrollTop) / 3; // Slow down by dividing by 3
-            console.log(`Scroll fraction (scrollTop / maxScrollTop / 3): ${scrollFraction}`);
+            // Adjust the scroll fraction further to ensure it plays smoothly until the end
+            const scrollFraction = Math.min(scrollTop / maxScrollTop, 1); // Ensures the fraction doesn't exceed 1
+            console.log(`Scroll fraction (scrollTop / maxScrollTop): ${scrollFraction}`);
 
             if (isNaN(scrollFraction) || !isFinite(scrollFraction)) {
                 console.error('Scroll fraction calculation failed, check scrollTop and maxScrollTop values.');
