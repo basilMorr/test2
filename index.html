@@ -37,7 +37,7 @@
             pointer-events: none;
         }
         .scroll-space {
-            height: 3000px; /* Creates enough space for scrolling */
+            height: 300vh; /* Creates enough space for scrolling */
         }
         .button, .logo {
             height: auto;
@@ -82,7 +82,11 @@
         path: 'data.json' // Path to your Lottie JSON file
     });
 
-
+    // Ensure the animation starts at the first frame
+    lottieAnimation.addEventListener('DOMLoaded', () => {
+        lottieAnimation.goToAndStop(0, true); // Force start at the first frame
+        console.log('Lottie animation set to start at frame 0.');
+    });
 
     // Listener for when the Lottie animation DOM is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
@@ -95,16 +99,6 @@
     lottieAnimation.addEventListener('data_ready', () => {
         console.log('Lottie data is ready, animation frames loaded.');
         console.log(`Total frames available: ${lottieAnimation.totalFrames}`);
-    });
-
-    // Check if scroll events are being detected globally
-    window.addEventListener('scroll', () => {
-        console.log('Global scroll event detected on window.');
-    });
-
-    // Directly check if document scrolls are detected
-    document.addEventListener('scroll', () => {
-        console.log('Scroll event detected on document.');
     });
 
     // Bind the animation playback to the scroll event
@@ -123,8 +117,8 @@
                 console.warn('Max scrollable height is zero or negative. Check scroll-space height or body height setting.');
             }
 
-            // Adjust the scroll fraction to be 1/3 of its calculated value
-            const scrollFraction = (scrollTop / maxScrollTop) / 10;
+            // Adjust the scroll fraction further or slow down the speed as needed
+            const scrollFraction = (scrollTop / maxScrollTop) / 3; // Slow down by dividing by 3
             console.log(`Scroll fraction (scrollTop / maxScrollTop / 3): ${scrollFraction}`);
 
             if (isNaN(scrollFraction) || !isFinite(scrollFraction)) {
