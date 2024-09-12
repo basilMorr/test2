@@ -8,6 +8,7 @@
         body {
             margin: 0;
             overflow-x: hidden; /* Ensure only vertical scroll is considered */
+            background-color: black; /* Set the background color to black */
             display: flex;
             justify-content: center;
         }
@@ -18,7 +19,7 @@
             position: relative;
         }
         #button-container {
-            position: absolute;
+            position: fixed; /* Make the buttons fixed */
             top: 2vh; /* Position relative to viewport height */
             left: 50%;
             transform: translateX(-50%);
