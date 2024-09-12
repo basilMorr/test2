@@ -3,113 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lottie Scroll Animation with Buttons</title>
+    <title>Lottie Animation</title>
+    <script src="https://unpkg.com/lottie-web@latest/build/player/lottie.min.js"></script>
     <style>
         body {
             margin: 0;
-            background-color: black; /* Set the background of the site to black */
-            overflow: hidden; /* Prevent horizontal overflow */
-        }
-        .lottie-container {
-            position: relative;
-            width: 100%;
-            height: 100vh; /* Full viewport height */
             overflow: hidden;
+            background: black;
         }
         #lottie-container {
-            width: 100%;
-            height: 100%;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
         }
-        .button-bar {
+        #lottie {
             position: absolute;
             top: 0;
-            right: 0;
-            width: 70px; /* Container width for button bar */
-            height: 70px; /* Same as the height of the top bar */
-            display: flex;
-            align-items: center; /* Center buttons vertically within the container */
-            flex-direction: column; /* Stack buttons vertically */
-            gap: 10px; /* Space between buttons */
-            padding: 10px; /* Ensure space inside container */
-            box-sizing: border-box; /* Include padding in width and height calculations */
-            background: transparent; /* Transparent background */
-        }
-        .button-bar img {
-            height: 60px; /* Resize images to 60px height */
-            width: auto; /* Maintain aspect ratio */
-            cursor: pointer;
-        }
-        .scroll-space {
-            height: 300vh; /* Creates enough space for scrolling */
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 <body>
-
-<div class="lottie-container">
-    <div id="lottie-container"></div>
-    <div class="button-bar">
-        <a href="https://www.google.com" target="_blank">
-            <img src="1Butt.png" alt="Button 1">
-        </a>
-        <a href="https://www.google.com" target="_blank">
-            <img src="2Butt.png" alt="Button 2">
-        </a>
-        <a href="https://www.google.com" target="_blank">
-            <img src="3Butt.png" alt="Button 3">
-        </a>
+    <div id="lottie-container">
+        <div id="lottie"></div>
     </div>
-</div>
-<div class="scroll-space"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Script loaded. Initializing Lottie animation.");
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
-<script>
-    function logDimensions() {
-        const lottieContainer = document.querySelector('#lottie-container');
-        const buttonBar = document.querySelector('.button-bar');
-        const lottieContainerRect = lottieContainer.getBoundingClientRect();
-        const buttonBarRect = buttonBar.getBoundingClientRect();
-        
-        console.log('Lottie Container Dimensions:', lottieContainerRect);
-        console.log('Button Bar Dimensions:', buttonBarRect);
-        console.log('Window Dimensions:', {
-            width: window.innerWidth,
-            height: window.innerHeight
+            const animation = lottie.loadAnimation({
+                container: document.getElementById('lottie'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: false,
+                path: 'https://test-rose-theta.vercel.app/data.json'
+            });
+
+            animation.addEventListener('DOMLoaded', () => {
+                console.log("Lottie animation DOM loaded.");
+                console.log("Lottie data is ready, animation frames loaded.");
+                console.log("Total frames available:", animation.totalFrames);
+            });
+
+            window.addEventListener('resize', adjustLayout);
+            document.addEventListener('scroll', () => {
+                const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollFraction = window.scrollY / maxScrollTop;
+                const frame = scrollFraction * animation.totalFrames;
+                animation.goToAndStop(frame, true);
+            });
+
+            function adjustLayout() {
+                console.log("Adjusting layout for window resize.");
+                const lottieContainer = document.getElementById('lottie-container');
+                const lottieDimensions = lottieContainer.getBoundingClientRect();
+                console.log("Lottie Container Dimensions:", lottieDimensions);
+                console.log("Window Dimensions:", window.innerWidth, window.innerHeight);
+            }
+
+            adjustLayout(); // Initial adjustment
         });
-    }
-
-    // Load the Lottie animation JSON file
-    const lottieAnimation = lottie.loadAnimation({
-        container: document.getElementById('lottie-container'),
-        renderer: 'svg',
-        loop: false,
-        autoplay: false,
-        path: 'data.json' // Path to your Lottie JSON file
-    });
-
-    // Listener for when the Lottie animation DOM is loaded
-    lottieAnimation.addEventListener('DOMLoaded', () => {
-        document.body.style.height = `${window.innerHeight * 3}px`; // Adjust scrollable height
-        logDimensions(); // Log dimensions after Lottie DOM is loaded
-    });
-
-    // Bind the animation playback to the scroll event
-    window.addEventListener('scroll', () => {
-        if (lottieAnimation.totalFrames > 0) {
-            const scrollTop = window.scrollY || window.pageYOffset;
-            const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollFraction = scrollTop / maxScrollTop;
-            const frame = Math.min(
-                lottieAnimation.totalFrames * scrollFraction,
-                lottieAnimation.totalFrames - 1
-            );
-            lottieAnimation.goToAndStop(frame, true);
-        }
-    });
-
-    // Log dimensions on window resize
-    window.addEventListener('resize', logDimensions);
-</script>
-
+    </script>
 </body>
 </html>
