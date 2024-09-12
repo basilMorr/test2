@@ -113,14 +113,19 @@
     });
 
     // Adjust the width of the menu bar to match the Lottie animation
-    function adjustMenuBarWidth() {
-        const lottieElement = document.querySelector('#lottie-container svg');
-        const menuBar = document.getElementById('menu-bar');
-        if (lottieElement) {
-            const lottieWidth = lottieElement.getBoundingClientRect().width;
-            menuBar.style.width = `${lottieWidth}px`;
-        }
+ function adjustMenuBarWidth() {
+    const lottieElement = document.querySelector('#lottie-container svg');
+    const menuBar = document.getElementById('menu-bar');
+
+    if (lottieElement) {
+        const lottieWidth = lottieElement.getBoundingClientRect().width;
+        console.log(`Lottie Element Width: ${lottieWidth}`); // Debug log
+        menuBar.style.width = `${lottieWidth}px`;
+    } else {
+        console.error('Lottie SVG element not found.'); // Error log if element is not detected
     }
+}
+
 
     // Continuously monitor the size changes in the Lottie element
     const resizeObserver = new ResizeObserver(adjustMenuBarWidth);
