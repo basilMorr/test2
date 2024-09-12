@@ -14,17 +14,30 @@
             align-items: center;
             height: 100vh;
         }
-        #lottie-container {
+        #aspect-ratio-container {
             position: relative;
             width: 100%;
             height: 100%;
             max-width: 1920px;
             max-height: 1080px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        #animation-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         #menu-bar {
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
             height: 7vh; /* Fixed height for the menu bar */
             background-color: black; /* Black menu bar */
             display: flex;
@@ -52,15 +65,18 @@
 </head>
 <body>
 
-<div id="lottie-container">
-    <div id="menu-bar">
-        <div id="menu-left">
-            <img src="1Butt.png" alt="Left Button" class="menu-button">
+<div id="aspect-ratio-container">
+    <div id="animation-wrapper">
+        <div id="menu-bar">
+            <div id="menu-left">
+                <img src="1Butt.png" alt="Left Button" class="menu-button">
+            </div>
+            <div id="menu-right">
+                <img src="2Butt.png" alt="Right Button 1" class="menu-button">
+                <img src="3Butt.png" alt="Right Button 2" class="menu-button">
+            </div>
         </div>
-        <div id="menu-right">
-            <img src="2Butt.png" alt="Right Button 1" class="menu-button">
-            <img src="3Butt.png" alt="Right Button 2" class="menu-button">
-        </div>
+        <div id="lottie-container"></div>
     </div>
 </div>
 
@@ -82,7 +98,6 @@
     // Listener for when the Lottie animation DOM is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
         console.log('Lottie animation DOM loaded.');
-        adjustMenuBarWidth(); // Adjust the menu bar width when the animation loads
     });
 
     // Bind the animation playback to the scroll event
@@ -100,16 +115,6 @@
             console.error('Animation frames are not available yet or set to zero.');
         }
     });
-
-    // Adjust the width of the menu bar to match the Lottie container
-    function adjustMenuBarWidth() {
-        const lottieContainer = document.getElementById('lottie-container');
-        const menuBar = document.getElementById('menu-bar');
-        menuBar.style.width = `${lottieContainer.clientWidth}px`;
-    }
-
-    // Call the function on resize to ensure it stays matched
-    window.addEventListener('resize', adjustMenuBarWidth);
 </script>
 
 </body>
