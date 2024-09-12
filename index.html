@@ -95,26 +95,26 @@
         });
 
         // Function to adjust the width of the menu bar to match the Lottie animation
-        function adjustMenuBarWidth() {
-            const lottieElement = document.querySelector('#lottie-container svg');
-            const menuBar = document.getElementById('menu-bar');
+       function adjustMenuBarWidth() {
+    const lottieElement = document.querySelector('#lottie-container svg');
+    const menuBar = document.getElementById('menu-bar');
 
-            if (lottieElement) {
-                const lottieWidth = lottieElement.getBoundingClientRect().width;
-                console.log(`Lottie Element Width: ${lottieWidth}`);
+    if (lottieElement) {
+        // Get the precise width of the Lottie animation, adjusting for potential fractional pixels
+        const lottieWidth = Math.ceil(lottieElement.getBoundingClientRect().width) + 2; // Add 2px to cover gaps
+        console.log(`Lottie Element Width: ${lottieWidth}`);
 
-                // Adjust menu bar width and force redraw
-                menuBar.style.width = `${lottieWidth}px`;
-                menuBar.style.transform = 'scale(1.01)'; // Apply temporary transform
-                requestAnimationFrame(() => {
-                    menuBar.style.transform = ''; // Reset transform
-                });
+        // Apply adjusted width to the menu bar
+        menuBar.style.width = `${lottieWidth}px`;
 
-                console.log(`Adjusted Menu Bar Width to: ${lottieWidth}`);
-            } else {
-                console.error('Lottie SVG element not found. Retrying...');
-            }
-        }
+        // Optional: Adjust positioning to ensure centering remains correct
+        menuBar.style.left = `calc(50% - ${lottieWidth / 2}px)`;
+
+        console.log(`Adjusted Menu Bar Width to: ${lottieWidth}`);
+    } else {
+        console.error('Lottie SVG element not found. Retrying...');
+    }
+}
 
         // Use ResizeObserver to monitor changes in the Lottie element's size
         const resizeObserver = new ResizeObserver(entries => {
