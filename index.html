@@ -37,7 +37,7 @@
             pointer-events: none;
         }
         .scroll-space {
-            height: 900vh; /* Creates enough space for scrolling */
+            height: 3000vh; /* Creates enough space for scrolling */
         }
         .button, .logo {
             height: auto;
@@ -81,6 +81,9 @@
         autoplay: false,
         path: 'data.json' // Path to your Lottie JSON file
     });
+
+    // Set the playback speed to half of the normal speed
+    lottieAnimation.setSpeed(0.2);
 
     // Listener for when the Lottie animation DOM is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
