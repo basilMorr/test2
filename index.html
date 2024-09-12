@@ -11,7 +11,6 @@
             background-color: black; /* Set the background color to black */
             display: flex;
             justify-content: center;
-            scroll-behavior: smooth; /* Smoothens the scrolling experience */
         }
         #animation-container {
             width: 100vw; /* Make it responsive with the viewport width */
@@ -83,11 +82,8 @@
         path: 'data.json' // Path to your Lottie JSON file
     });
 
-    // Ensure the animation starts at the first frame
-    lottieAnimation.addEventListener('DOMLoaded', () => {
-        lottieAnimation.goToAndStop(0, true); // Force start at the first frame
-        console.log('Lottie animation set to start at frame 0.');
-    });
+    // Set the playback speed to half of the normal speed
+    lottieAnimation.setSpeed(0.2);
 
     // Listener for when the Lottie animation DOM is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
@@ -100,6 +96,16 @@
     lottieAnimation.addEventListener('data_ready', () => {
         console.log('Lottie data is ready, animation frames loaded.');
         console.log(`Total frames available: ${lottieAnimation.totalFrames}`);
+    });
+
+    // Check if scroll events are being detected globally
+    window.addEventListener('scroll', () => {
+        console.log('Global scroll event detected on window.');
+    });
+
+    // Directly check if document scrolls are detected
+    document.addEventListener('scroll', () => {
+        console.log('Scroll event detected on document.');
     });
 
     // Bind the animation playback to the scroll event
@@ -118,8 +124,7 @@
                 console.warn('Max scrollable height is zero or negative. Check scroll-space height or body height setting.');
             }
 
-            // Adjust the scroll fraction further to ensure it plays smoothly until the end
-            const scrollFraction = Math.min(scrollTop / maxScrollTop, 1); // Ensures the fraction doesn't exceed 1
+            const scrollFraction = scrollTop / maxScrollTop;
             console.log(`Scroll fraction (scrollTop / maxScrollTop): ${scrollFraction}`);
 
             if (isNaN(scrollFraction) || !isFinite(scrollFraction)) {
