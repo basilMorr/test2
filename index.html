@@ -18,16 +18,15 @@
             position: relative;
             width: 100%;
             max-width: 1920px; /* Set the maximum width of the container */
-            height: 100vh;
+            height: 100vh; /* Full viewport height */
             overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
         }
         #lottie-container {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
         }
         .button-bar {
             position: absolute;
@@ -35,10 +34,9 @@
             right: 10px;
             height: 70px; /* Height of the black bar */
             display: flex;
-            justify-content: flex-end; /* Aligns buttons to the right */
             align-items: center; /* Centers buttons vertically within the bar */
-            padding-right: 10px; /* Space from the right edge */
             gap: 10px; /* Space between buttons */
+            background: transparent; /* Transparent background */
         }
         .button-bar img {
             height: 60px; /* Resize images to 60px height */
