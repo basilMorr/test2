@@ -68,6 +68,20 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
 <script>
+    function logDimensions() {
+        const lottieContainer = document.querySelector('#lottie-container');
+        const buttonBar = document.querySelector('.button-bar');
+        const lottieContainerRect = lottieContainer.getBoundingClientRect();
+        const buttonBarRect = buttonBar.getBoundingClientRect();
+        
+        console.log('Lottie Container Dimensions:', lottieContainerRect);
+        console.log('Button Bar Dimensions:', buttonBarRect);
+        console.log('Window Dimensions:', {
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
+    }
+
     // Load the Lottie animation JSON file
     const lottieAnimation = lottie.loadAnimation({
         container: document.getElementById('lottie-container'),
@@ -80,6 +94,7 @@
     // Listener for when the Lottie animation DOM is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
         document.body.style.height = `${window.innerHeight * 3}px`; // Adjust scrollable height
+        logDimensions(); // Log dimensions after Lottie DOM is loaded
     });
 
     // Bind the animation playback to the scroll event
@@ -95,6 +110,9 @@
             lottieAnimation.goToAndStop(frame, true);
         }
     });
+
+    // Log dimensions on window resize
+    window.addEventListener('resize', logDimensions);
 </script>
 
 </body>
