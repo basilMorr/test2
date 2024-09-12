@@ -14,7 +14,7 @@
         #animation-container {
             width: 100vw; /* Make it responsive with the viewport width */
             max-width: 1920px; /* Constrain to max size */
-            height: auto;
+            height: 2050px; /* Set a fixed height for the animation area */
             position: relative;
         }
         #button-container {
@@ -27,8 +27,11 @@
             z-index: 10;
         }
         #lottie-container {
-            width: 100%; /* Make the Lottie fill the container */
-            height: calc(100vh); /* Adjust to fit the viewport height */
+            position: fixed; /* Keep the Lottie container fixed */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; /* Adjust to fit the viewport height */
             pointer-events: none;
         }
         .scroll-space {
@@ -52,8 +55,9 @@
             <img src="2Butt.png" alt="Button 2" class="button">
         </a>
     </div>
-    <div id="lottie-container"></div>
 </div>
+
+<div id="lottie-container"></div> <!-- Place Lottie container outside of the animation container -->
 
 <div class="scroll-space"></div>
 
