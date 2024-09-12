@@ -7,63 +7,60 @@
     <style>
         body {
             margin: 0;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Ensure only vertical scroll is considered */
+            background-color: black; /* Set background color to black */
         }
-        #container {
+        #lottie-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
+            width: 100%;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            background: #000;
-        }
-        #animation-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            max-width: 1920px;
-            max-height: 1080px;
-        }
-        #menu-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 7vh; /* Fixed height for the menu bar */
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            color: white;
-            font-size: 18px;
-        }
-        #lottie-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             pointer-events: none;
         }
         .scroll-space {
             height: 300vh; /* Creates enough space for scrolling */
         }
+        #menu-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 7vh; /* Fixed height for the menu bar */
+            background-color: black; /* Black menu bar */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 10;
+        }
+        #menu-left {
+            display: flex;
+            align-items: center;
+        }
+        #menu-right {
+            display: flex;
+            align-items: center;
+        }
+        .menu-button {
+            height: 5vh; /* Adjust button height as needed */
+            margin-left: 10px; /* Space between right buttons */
+        }
     </style>
 </head>
 <body>
 
-<div id="container">
-    <div id="animation-wrapper">
-        <div id="menu-bar">Menu Bar</div>
-        <div id="lottie-container"></div>
+<div id="menu-bar">
+    <div id="menu-left">
+        <img src="1Butt.png" alt="Left Button" class="menu-button">
+    </div>
+    <div id="menu-right">
+        <img src="2Butt.png" alt="Right Button 1" class="menu-button">
+        <img src="3Butt.png" alt="Right Button 2" class="menu-button">
     </div>
 </div>
 
+<div id="lottie-container"></div>
 <div class="scroll-space"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
@@ -84,8 +81,33 @@
         console.log('Lottie animation DOM loaded.');
     });
 
+    // Listener for when animation frames are ready
+    lottieAnimation.addEventListener('data_ready', () => {
+        console.log('Lottie data is ready, animation frames loaded.');
+    });
+
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
+        console.log('Scroll event detected inside animation binding.');
         if (lottieAnimation.totalFrames > 0) {
             const scrollTop = window.scrollY || window.pageYOffset;
-            const maxScrollTop = document.documentElement.scrollHeig
+            const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollFraction = scrollTop / maxScrollTop;
+            const frame = Math.min(
+                lottieAnimation.totalFrames * scrollFraction,
+                lottieAnimation.totalFrames - 1
+            );
+            lottieAnimation.goToAndStop(frame, true);
+        } else {
+            console.error('Animation frames are not available yet or set to zero.');
+        }
+    });
+
+    // Listener to check when the animation is completely ready
+    lottieAnimation.addEventListener('complete', () => {
+        console.log('Lottie animation has completed playback.');
+    });
+</script>
+
+</body>
+</html>
