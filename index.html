@@ -1,20 +1,89 @@
-function adjustMenuBarWidth() {
-    const lottieElement = document.querySelector('#lottie-container svg');
-    const menuBar = document.getElementById('menu-bar');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottie Animation with Menu Bar</title>
+    <style>
+        /* Basic styles to position elements correctly */
+        #lottie-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
 
-    if (lottieElement) {
-        const lottieRect = lottieElement.getBoundingClientRect();
-        const lottieWidth = lottieRect.width;
-        const lottieLeft = lottieRect.left;
+        #menu-bar {
+            position: absolute;
+            top: 0;
+            height: 7vh; /* Adjust this value as needed */
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Right align the buttons */
+            background: transparent; /* Set to transparent to match requirements */
+            z-index: 10;
+        }
 
-        console.log(`Lottie Element Width: ${lottieWidth}, Left: ${lottieLeft}`);
+        #menu-bar img {
+            margin-right: 10px; /* Space between buttons and edge */
+        }
+    </style>
+</head>
+<body>
 
-        // Set the menu bar width and position to match the Lottie element
-        menuBar.style.width = `${lottieWidth}px`;
-        menuBar.style.left = `${lottieLeft}px`;
+<div id="lottie-container">
+    <!-- The Lottie animation should be loaded here, adjust as needed -->
+    <svg id="lottie-element"></svg> <!-- Replace with actual Lottie SVG or animation -->
+    <div id="menu-bar">
+        <img src="3Butt.png" alt="Button 1">
+        <img src="4Butt.png" alt="Button 2">
+    </div>
+</div>
 
-        console.log(`Adjusted Menu Bar Width to: ${lottieWidth} and Left to: ${lottieLeft}`);
-    } else {
-        console.error('Lottie SVG element not found.');
+<script>
+    function adjustMenuBarWidth() {
+        const lottieElement = document.querySelector('#lottie-container svg');
+        const menuBar = document.getElementById('menu-bar');
+
+        if (lottieElement) {
+            const lottieRect = lottieElement.getBoundingClientRect();
+            const containerRect = lottieElement.parentElement.getBoundingClientRect(); // Parent container check
+            const lottieWidth = lottieRect.width;
+            const lottieLeft = lottieRect.left - containerRect.left; // Calculate relative left within container
+
+            console.log(`Lottie Element Width: ${lottieWidth}, Left: ${lottieLeft}`);
+
+            // Adjust the menu bar to match the Lottie element
+            menuBar.style.width = `${lottieWidth}px`;
+            menuBar.style.left = `${lottieLeft}px`;
+
+            console.log(`Adjusted Menu Bar Width to: ${lottieWidth} and Left to: ${lottieLeft}`);
+        } else {
+            console.error('Lottie SVG element not found.');
+        }
     }
-}
+
+    // Initialize ResizeObserver
+    const resizeObserver = new ResizeObserver(() => {
+        adjustMenuBarWidth();
+    });
+
+    // Observe the Lottie container for changes
+    const lottieContainer = document.querySelector('#lottie-container');
+    if (lottieContainer) {
+        resizeObserver.observe(lottieContainer);
+    } else {
+        console.error('Lottie container not found.');
+    }
+
+    // Adjust the menu bar on initial load
+    window.addEventListener('load', adjustMenuBarWidth);
+    window.addEventListener('resize', adjustMenuBarWidth);
+</script>
+
+</body>
+</html>
