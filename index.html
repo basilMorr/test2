@@ -15,7 +15,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            height: 100vh; /* Default height */
+            height: 100vh; /* Full height initially */
             pointer-events: none;
         }
         .menu-bar {
@@ -108,4 +108,26 @@
     window.addEventListener('scroll', () => {
         if (lottieAnimation.totalFrames > 0) {
             const scrollTop = window.scrollY || window.pageYOffset;
-            const maxScrollTop = document.documentElement.scrollHeight - window.innerHeigh
+            const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
+
+            if (maxScrollTop <= 0) {
+                console.warn('Max scrollable height is zero or negative.');
+            }
+
+            const scrollFraction = scrollTop / maxScrollTop;
+            const frame = Math.min(
+                lottieAnimation.totalFrames * scrollFraction,
+                lottieAnimation.totalFrames - 1
+            );
+            lottieAnimation.goToAndStop(frame, true);
+        }
+    });
+
+    // Listener to check when the animation is completely ready
+    lottieAnimation.addEventListener('complete', () => {
+        console.log('Lottie animation has completed playback.');
+    });
+</script>
+
+</body>
+</html>
