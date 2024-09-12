@@ -23,15 +23,16 @@
         .button-bar {
             position: absolute;
             top: 0;
-            right: 10px;
-            height: 70px; /* Height of the black bar */
+            right: 0;
+            width: 70px; /* Container width for button bar */
+            height: 70px; /* Same as the height of the top bar */
             display: flex;
-            align-items: center; /* Center buttons vertically within the bar */
+            align-items: center; /* Center buttons vertically within the container */
             flex-direction: column; /* Stack buttons vertically */
             gap: 10px; /* Space between buttons */
+            padding: 10px; /* Ensure space inside container */
+            box-sizing: border-box; /* Include padding in width and height calculations */
             background: transparent; /* Transparent background */
-            width: 60px; /* Width to fit within the Lottie container */
-            box-sizing: border-box; /* Include padding and border in width calculations */
         }
         .button-bar img {
             height: 60px; /* Resize images to 60px height */
