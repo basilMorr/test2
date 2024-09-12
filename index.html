@@ -112,13 +112,19 @@
         }
     });
 
-    // Adjust the width of the menu bar to match the Lottie container
+    // Adjust the width of the menu bar to match the Lottie animation
     function adjustMenuBarWidth() {
-        const lottieContainer = document.getElementById('lottie-container');
+        const lottieElement = document.querySelector('#lottie-container svg');
         const menuBar = document.getElementById('menu-bar');
-        const lottieRect = lottieContainer.getBoundingClientRect();
-        menuBar.style.width = `${lottieRect.width}px`;
+        if (lottieElement) {
+            const lottieWidth = lottieElement.getBoundingClientRect().width;
+            menuBar.style.width = `${lottieWidth}px`;
+        }
     }
+
+    // Continuously monitor the size changes in the Lottie element
+    const resizeObserver = new ResizeObserver(adjustMenuBarWidth);
+    resizeObserver.observe(document.getElementById('lottie-container'));
 
     // Call the function on resize and load to ensure it stays matched
     window.addEventListener('resize', adjustMenuBarWidth);
