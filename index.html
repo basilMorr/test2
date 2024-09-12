@@ -36,12 +36,11 @@
             width: 100%;
             height: 100vh; /* Adjust to fit the viewport height */
             pointer-events: none;
-            visibility: hidden; /* Hide the container during loading */
-            opacity: 0; /* Ensure it’s not visible */
+            opacity: 0; /* Hide the container initially */
             transition: opacity 0.5s ease; /* Fade-in effect for smoother appearance */
         }
         .scroll-space {
-            height: 600vh; /* Increase the scroll space to further slow down the animation */
+            height: 600vh; /* Increase the scroll space to slow down the animation */
         }
         .button, .logo {
             height: auto;
@@ -83,14 +82,14 @@
         renderer: 'svg',
         loop: false,
         autoplay: false,
-        path: 'data.json', // Path to your Lottie JSON file
+        path: 'data.json', // Ensure this path points to the correct Lottie JSON file
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice',
         }
     });
 
     // Set the playback speed to slow down the animation
-    lottieAnimation.setSpeed(0.1); // Fine-tune the speed factor as needed
+    lottieAnimation.setSpeed(0.3); // Adjust the speed factor further if needed
 
     // Disable subframe rendering to prevent skipping or misaligning frames
     lottieAnimation.setSubframe(false);
@@ -108,42 +107,42 @@
 
         // Reveal the Lottie container once it's ready to avoid initial frame flashes
         const lottieContainer = document.getElementById('lottie-container');
-        lottieContainer.style.visibility = 'visible';
-        lottieContainer.style.opacity = 1;
+        lottieContainer.style.opacity = 1; // Show the container when ready
     });
 
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
-        console.log('Scroll event detected inside animation binding.');
         if (lottieAnimation.totalFrames > 0) {
-            console.log(`Total frames detected: ${lottieAnimation.totalFrames}`);
-
             const scrollTop = window.scrollY || window.pageYOffset;
-            console.log(`Current scroll position: ${scrollTop}`);
-            
             const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
-            console.log(`Max scrollable height: ${maxScrollTop}`);
 
             if (maxScrollTop <= 0) {
                 console.warn('Max scrollable height is zero or negative. Check scroll-space height or body height setting.');
             }
 
-            // Further adjust the fraction to ensure every frame is reached linearly
-            const scrollFraction = Math.min(scrollTop / maxScrollTop, 1); // Ensures the fraction doesn't exceed 1
-            console.log(`Scroll fraction (scrollTop / maxScrollTop): ${scrollFraction}`);
+            // Calculate the scroll fraction for smooth frame mapping
+            const scrollFraction = Math.min(scrollTop / maxScrollTop, 1); // Ensure it doesn’t exceed 1
 
             if (isNaN(scrollFraction) || !isFinite(scrollFraction)) {
                 console.error('Scroll fraction calculation failed, check scrollTop and maxScrollTop values.');
                 return;
             }
 
-            // Round the calculated frame to ensure smooth, linear increments
+            // Calculate the frame accurately to ensure smooth playback
             const frame = Math.round(
                 lottieAnimation.totalFrames * scrollFraction
-            ); 
-            console.log(`Calculated frame to go to: ${frame}`);
+            );
             lottieAnimation.goToAndStop(frame, true);
-            console.log(`Animation updated to frame: ${frame}`);
         } else {
             console.error('Animation frames are not available yet or set to zero.');
         }
+    });
+
+    // Listener to check when the animation is completely ready
+    lottieAnimation.addEventListener('complete', () => {
+        console.log('Lottie animation has completed playback.');
+    });
+</script>
+
+</body>
+</html>
