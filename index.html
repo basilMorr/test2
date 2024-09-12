@@ -24,7 +24,8 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 1vw; /* Gap between buttons scales with viewport width */
+            align-items: center; /* Center align items vertically */
+            gap: 1vw; /* Gap between elements scales with viewport width */
             z-index: 10;
         }
         #lottie-container {
@@ -38,10 +39,15 @@
         .scroll-space {
             height: 300vh; /* Creates enough space for scrolling */
         }
-        .button {
-            width: 8vw; /* Scale with viewport width */
+        .button, .logo {
             height: auto;
             cursor: pointer;
+        }
+        .button {
+            width: 8vw; /* Scale buttons with viewport width */
+        }
+        .logo {
+            width: 10vw; /* Scale logo with viewport width */
         }
     </style>
 </head>
@@ -52,6 +58,7 @@
         <a href="https://x.com/slickricksolana" target="_blank">
             <img src="1Butt.png" alt="Button 1" class="button">
         </a>
+        <img src="slickRick.png" alt="Slick Rick Logo" class="logo">
         <a href="https://t.me/SlickRickPortal" target="_blank">
             <img src="2Butt.png" alt="Button 2" class="button">
         </a>
