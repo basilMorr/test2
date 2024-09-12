@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lottie Scroll Animation</title>
+    <title>Lottie Animation with Menu Bar</title>
     <style>
         body {
             margin: 0;
-            overflow-x: hidden; /* Ensure only vertical scroll is considered */
-        }
-        #wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
+            background-color: #000;
+        }
+        #aspect-ratio-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 1920px;
+            max-height: 1080px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,17 +28,18 @@
         #animation-container {
             width: 100%;
             height: 100%;
-            max-width: 1920px;
-            max-height: 1080px;
-            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
         #menu-bar {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 7vh; /* Adjustable to maintain a consistent ratio */
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent menu bar */
+            height: 7vh; /* Fixed height for the menu bar */
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
             z-index: 10;
             display: flex;
             align-items: center;
@@ -48,22 +54,18 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-        }
-        .scroll-space {
-            height: 300vh; /* Creates enough space for scrolling */
+            z-index: 1;
         }
     </style>
 </head>
 <body>
 
-<div id="wrapper">
+<div id="aspect-ratio-container">
     <div id="animation-container">
         <div id="menu-bar">Menu Bar</div>
         <div id="lottie-container"></div>
     </div>
 </div>
-
-<div class="scroll-space"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
 <script>
@@ -73,8 +75,8 @@
     const lottieAnimation = lottie.loadAnimation({
         container: document.getElementById('lottie-container'),
         renderer: 'svg',
-        loop: false,
-        autoplay: false,
+        loop: true,
+        autoplay: true,
         path: 'data.json' // Path to your Lottie JSON file
     });
 
@@ -84,26 +86,6 @@
 
     lottieAnimation.addEventListener('data_ready', () => {
         console.log('Lottie data is ready, animation frames loaded.');
-    });
-
-    window.addEventListener('scroll', () => {
-        console.log('Scroll event detected inside animation binding.');
-        if (lottieAnimation.totalFrames > 0) {
-            const scrollTop = window.scrollY || window.pageYOffset;
-            const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollFraction = scrollTop / maxScrollTop;
-            const frame = Math.min(
-                lottieAnimation.totalFrames * scrollFraction,
-                lottieAnimation.totalFrames - 1
-            );
-            lottieAnimation.goToAndStop(frame, true);
-        } else {
-            console.error('Animation frames are not available yet or set to zero.');
-        }
-    });
-
-    lottieAnimation.addEventListener('complete', () => {
-        console.log('Lottie animation has completed playback.');
     });
 </script>
 
