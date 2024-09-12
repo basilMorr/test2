@@ -40,25 +40,25 @@
         path: 'data.json' // Path to your Lottie JSON file
     });
 
-    // Add an event listener to ensure the animation is loaded
+    // Check if Lottie animation is ready
     lottieAnimation.addEventListener('DOMLoaded', () => {
         console.log('Lottie animation DOM loaded.');
-        document.body.style.height = `${window.innerHeight * 3}px`; // Create enough scroll space
+        document.body.style.height = `${window.innerHeight * 3}px`; // Creates enough scroll space
     });
 
-    // Add a listener when the animation is fully ready
-    lottieAnimation.addEventListener('complete', () => {
-        console.log('Lottie animation fully ready.');
-    });
-
-    // Event listener for when the animation has loaded its data
+    // Check if data is fully ready
     lottieAnimation.addEventListener('data_ready', () => {
         console.log('Lottie data is ready, animation frames loaded.');
     });
 
+    // Add a global scroll event listener
+    window.addEventListener('scroll', () => {
+        console.log('Global scroll event detected.');
+    });
+
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
-        console.log('Scroll event detected.');
+        console.log('Scroll event detected inside animation binding.');
         if (lottieAnimation.totalFrames > 0) {
             console.log(`Total frames: ${lottieAnimation.totalFrames}`);
             const scrollTop = window.scrollY || window.pageYOffset;
