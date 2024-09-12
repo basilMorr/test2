@@ -3,45 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lottie Animation</title>
+    <title>Lottie Scroll Animation</title>
     <style>
         body {
             margin: 0;
-            overflow-x: hidden; /* Ensure no horizontal scroll */
+            overflow-x: hidden; /* Ensure only vertical scroll is considered */
+            position: relative; /* Make body the reference for positioning */
         }
         #lottie-container {
-            position: fixed;
+            position: absolute; /* Position it absolutely */
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh; /* Full viewport height */
-            pointer-events: none; /* Avoid interaction with animation container */
+            height: 100vh;
+            pointer-events: none;
         }
-        .menu-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 7vh; /* Fixed height */
-            background-color: red; /* Red color */
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10; /* Above other content */
-            width: 100%; /* Default width, to be adjusted */
-            box-sizing: border-box;
-        }
-        .scroll-space {
-            height: 300vh; /* Ensure enough scroll space */
+        #menu-bar {
+            position: absolute;
+            background-color: red; /* Example color */
+            height: 7vh; /* Set height as a percentage of viewport height */
+            width: 100%; /* Default width for troubleshooting */
+            top: 0; /* Start from the top of the animation */
         }
     </style>
 </head>
 <body>
 
-<div class="menu-bar" id="menu-bar">
-    Menu Bar
-</div>
 <div id="lottie-container"></div>
+<div id="menu-bar"></div>
 <div class="scroll-space"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
@@ -51,7 +40,6 @@
     const lottieContainer = document.getElementById('lottie-container');
     const menuBar = document.getElementById('menu-bar');
 
-    // Load the Lottie animation JSON file
     const lottieAnimation = lottie.loadAnimation({
         container: lottieContainer,
         renderer: 'svg',
@@ -60,35 +48,30 @@
         path: 'data.json' // Path to your Lottie JSON file
     });
 
-    function adjustLayout() {
-        const lottieRect = lottieContainer.getBoundingClientRect();
-        const menuBarHeight = 7 * window.innerHeight / 100; // 7% of viewport height
-
-        console.log('Adjusting layout...');
-        console.log(`Lottie container width: ${lottieRect.width}px`);
-        console.log(`Lottie container height: ${lottieRect.height}px`);
-        console.log(`Menu bar height: ${menuBarHeight}px`);
-
-        // Adjust menu bar width to match animation width
-        menuBar.style.width = `${lottieRect.width}px`;
-        // Set menu bar height
-        menuBar.style.height = `${menuBarHeight}px`;
-
-        // Adjust menu bar top position to ensure it is fixed relative to the animation
-        menuBar.style.top = `${lottieRect.top}px`;
-
-        console.log('Layout adjusted.');
-        console.log(`Menu bar width: ${menuBar.style.width}`);
-        console.log(`Menu bar height: ${menuBar.style.height}`);
-        console.log(`Menu bar top position: ${menuBar.style.top}`);
-    }
-
-    // Initial adjustment
     lottieAnimation.addEventListener('DOMLoaded', () => {
         console.log('Lottie animation DOM loaded.');
         adjustLayout();
         document.body.style.height = `${window.innerHeight * 3}px`; // Adjust scrollable height
     });
+
+    lottieAnimation.addEventListener('data_ready', () => {
+        console.log('Lottie data is ready, animation frames loaded.');
+    });
+
+    function adjustLayout() {
+        const lottieWidth = lottieContainer.getBoundingClientRect().width;
+        const lottieHeight = lottieContainer.getBoundingClientRect().height;
+        const menuBarHeight = window.innerHeight * 0.07; // 7% of viewport height
+
+        menuBar.style.width = `${lottieWidth}px`;
+        menuBar.style.height = `${menuBarHeight}px`;
+
+        console.log(`Lottie container width: ${lottieWidth}px`);
+        console.log(`Lottie container height: ${lottieHeight}px`);
+        console.log(`Menu bar height: ${menuBarHeight}px`);
+        console.log(`Menu bar width: ${menuBar.style.width}`);
+        console.log(`Menu bar top position: ${menuBar.style.top}`);
+    }
 
     // Adjust layout on window resize
     window.addEventListener('resize', () => {
@@ -96,21 +79,12 @@
         adjustLayout();
     });
 
-    // Listener for when animation frames are ready
-    lottieAnimation.addEventListener('data_ready', () => {
-        console.log('Lottie data is ready, animation frames loaded.');
-    });
-
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
+        console.log('Scroll event detected.');
         if (lottieAnimation.totalFrames > 0) {
             const scrollTop = window.scrollY || window.pageYOffset;
             const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
-
-            if (maxScrollTop <= 0) {
-                console.warn('Max scrollable height is zero or negative.');
-            }
-
             const scrollFraction = scrollTop / maxScrollTop;
             const frame = Math.min(
                 lottieAnimation.totalFrames * scrollFraction,
@@ -120,7 +94,6 @@
         }
     });
 
-    // Listener to check when the animation is completely ready
     lottieAnimation.addEventListener('complete', () => {
         console.log('Lottie animation has completed playback.');
     });
