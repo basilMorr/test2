@@ -126,6 +126,17 @@
         }
     });
 
+    // Continuously adjust menu bar width every frame to ensure synchronization
+    function monitorAnimation() {
+        adjustMenuBarWidth();
+        requestAnimationFrame(monitorAnimation); // Repeat this process every frame
+    }
+
+    // Start monitoring once the Lottie element is ready
+    lottieAnimation.addEventListener('DOMLoaded', () => {
+        monitorAnimation();
+    });
+
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
         if (lottieAnimation.totalFrames > 0) {
