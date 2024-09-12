@@ -9,13 +9,20 @@
             margin: 0;
             overflow-x: hidden; /* Ensure only vertical scroll is considered */
         }
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+        }
         .menu-bar {
             position: fixed;
             top: 0;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%;
+            max-width: 100vw;
             height: 7vh; /* 7% of viewport height */
-            background-color: #333; /* Change to your preferred color */
+            background-color: red; /* Red color for the menu bar */
             color: white;
             display: flex;
             align-items: center;
@@ -25,8 +32,10 @@
         #lottie-container {
             position: fixed;
             top: 7vh; /* Below the menu bar */
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%;
+            max-width: 100vw;
             height: calc(100vh - 7vh); /* Adjusted to fit below the menu bar */
             pointer-events: none;
         }
@@ -37,11 +46,13 @@
 </head>
 <body>
 
-<div class="menu-bar">
-    <!-- Menu content goes here -->
-    Menu Bar
+<div class="container">
+    <div class="menu-bar">
+        <!-- Menu content goes here -->
+        Menu Bar
+    </div>
+    <div id="lottie-container"></div>
 </div>
-<div id="lottie-container"></div>
 <div class="scroll-space"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
@@ -68,16 +79,6 @@
     lottieAnimation.addEventListener('data_ready', () => {
         console.log('Lottie data is ready, animation frames loaded.');
         console.log(`Total frames available: ${lottieAnimation.totalFrames}`);
-    });
-
-    // Check if scroll events are being detected globally
-    window.addEventListener('scroll', () => {
-        console.log('Global scroll event detected on window.');
-    });
-
-    // Directly check if document scrolls are detected
-    document.addEventListener('scroll', () => {
-        console.log('Scroll event detected on document.');
     });
 
     // Bind the animation playback to the scroll event
