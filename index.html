@@ -54,8 +54,8 @@
     });
 
     // Check if scroll events are being detected at all
-    window.addEventListener('scroll', () => {
-        console.log('Global scroll event detected.');
+    window.addEventListener('scroll', (event) => {
+        console.log('Global scroll event detected.', event);
     });
 
     // Bind the animation playback to the scroll event
