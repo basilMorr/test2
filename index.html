@@ -9,12 +9,25 @@
             margin: 0;
             overflow-x: hidden; /* Ensure only vertical scroll is considered */
         }
-        #lottie-container {
+        .menu-bar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
+            height: 7vh; /* 7% of viewport height */
+            background-color: #333; /* Change to your preferred color */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10; /* Ensure it is above other content */
+        }
+        #lottie-container {
+            position: fixed;
+            top: 7vh; /* Below the menu bar */
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 7vh); /* Adjusted to fit below the menu bar */
             pointer-events: none;
         }
         .scroll-space {
@@ -24,6 +37,10 @@
 </head>
 <body>
 
+<div class="menu-bar">
+    <!-- Menu content goes here -->
+    Menu Bar
+</div>
 <div id="lottie-container"></div>
 <div class="scroll-space"></div>
 
