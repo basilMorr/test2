@@ -98,6 +98,7 @@
         if (lottieElement) {
             const lottieWidth = lottieElement.getBoundingClientRect().width;
             console.log(`Lottie Element Width: ${lottieWidth}`);
+            console.log(`Adjusting Menu Bar Width to: ${lottieWidth}`);
             menuBar.style.width = `${lottieWidth}px`;
         } else {
             console.error('Lottie SVG element not found. Retrying...');
@@ -108,6 +109,7 @@
     const resizeObserver = new ResizeObserver(entries => {
         for (let entry of entries) {
             if (entry.target.matches('#lottie-container svg')) {
+                console.log('ResizeObserver triggered for Lottie element.');
                 adjustMenuBarWidth(); // Adjust when the Lottie element resizes
             }
         }
@@ -119,6 +121,7 @@
         const lottieElement = document.querySelector('#lottie-container svg');
 
         if (lottieElement) {
+            console.log('Starting observation of Lottie element.');
             resizeObserver.observe(lottieElement); // Start observing the Lottie element
             adjustMenuBarWidth(); // Initial adjustment
         } else {
@@ -128,17 +131,20 @@
 
     // Continuously adjust menu bar width every frame to ensure synchronization
     function monitorAnimation() {
+        console.log('MonitorAnimation called. Adjusting menu bar width.');
         adjustMenuBarWidth();
         requestAnimationFrame(monitorAnimation); // Repeat this process every frame
     }
 
     // Start monitoring once the Lottie element is ready
     lottieAnimation.addEventListener('DOMLoaded', () => {
+        console.log('Starting continuous monitoring of animation.');
         monitorAnimation();
     });
 
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
+        console.log('Scroll event detected.');
         if (lottieAnimation.totalFrames > 0) {
             const scrollTop = window.scrollY || window.pageYOffset;
             const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
@@ -147,6 +153,7 @@
                 lottieAnimation.totalFrames * scrollFraction,
                 lottieAnimation.totalFrames - 1
             );
+            console.log(`Scroll position: ${scrollTop}, Frame: ${frame}`);
             lottieAnimation.goToAndStop(frame, true);
         } else {
             console.error('Animation frames are not available yet or set to zero.');
@@ -154,7 +161,10 @@
     });
 
     // Call the function on resize to ensure it stays matched
-    window.addEventListener('resize', adjustMenuBarWidth);
+    window.addEventListener('resize', () => {
+        console.log('Resize event detected.');
+        adjustMenuBarWidth();
+    });
 </script>
 
 </body>
