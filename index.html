@@ -41,7 +41,7 @@
             align-items: center;
             padding: 0 20px;
             z-index: 10;
-            transition: width 0.1s; /* Smooth adjustment */
+            transition: width 0.1s ease; /* Smooth adjustment */
         }
         #menu-left {
             display: flex;
@@ -103,13 +103,13 @@
             console.log(`Lottie Element Width: ${lottieWidth}`);
             console.log(`Computed Style Width: ${computedStyle.width}`);
             console.log(`Transform Scale: ${transformScale}`);
-            
-            // Check if width seems incorrectly small, indicating a transformation issue
-            if (lottieWidth > 100) {
+
+            // Check if the width seems reasonable and adjust the menu bar accordingly
+            if (lottieWidth > 100 && lottieWidth < window.innerWidth) {
                 console.log(`Adjusting Menu Bar Width to: ${lottieWidth}`);
                 menuBar.style.width = `${lottieWidth}px`;
             } else {
-                console.warn('Detected anomalously small width. Skipping adjustment to avoid errors.');
+                console.warn('Detected anomalously small or too large width. Skipping adjustment to avoid visual errors.');
             }
         } else {
             console.error('Lottie SVG element not found. Retrying...');
@@ -151,9 +151,6 @@
         console.log('Starting continuous monitoring of animation.');
         monitorAnimation();
     });
-
-    // Prevent external events like resize from disrupting the width adjustments
-    window.removeEventListener('resize', adjustMenuBarWidth);
 
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
