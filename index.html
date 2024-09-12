@@ -36,8 +36,9 @@
             width: 100%;
             height: 100vh; /* Adjust to fit the viewport height */
             pointer-events: none;
-            opacity: 0; /* Hide the container initially */
-            transition: opacity 0.5s ease; /* Fade-in effect */
+            visibility: hidden; /* Hide the container during loading */
+            opacity: 0; /* Ensure it’s not visible */
+            transition: opacity 0.5s ease; /* Fade-in effect for smoother appearance */
         }
         .scroll-space {
             height: 300vh; /* Creates enough space for scrolling */
@@ -82,23 +83,22 @@
         renderer: 'svg',
         loop: false,
         autoplay: false,
-        path: 'data.json' // Path to your Lottie JSON file
+        path: 'data.json', // Path to your Lottie JSON file
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        }
     });
 
     // Set the playback speed to slow down the animation
     lottieAnimation.setSpeed(0.3);
 
-    // Ensure the animation starts at the first frame
-    lottieAnimation.addEventListener('DOMLoaded', () => {
-        lottieAnimation.goToAndStop(0, true); // Force start at the first frame
-        console.log('Lottie animation set to start at frame 0.');
-    });
+    // Disable subframe rendering to prevent skipping or misaligning frames
+    lottieAnimation.setSubframe(false);
 
     // Listener for when the Lottie animation DOM is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
-        console.log('Lottie animation DOM loaded.');
-        document.body.style.height = `${window.innerHeight * 3}px`; // Adjust scrollable height
-        console.log(`Body height set to ${document.body.style.height}`);
+        lottieAnimation.goToAndStop(0, true); // Force start at the first frame
+        console.log('Lottie animation set to start at frame 0.');
     });
 
     // Listener for when animation frames are ready
@@ -106,8 +106,10 @@
         console.log('Lottie data is ready, animation frames loaded.');
         console.log(`Total frames available: ${lottieAnimation.totalFrames}`);
 
-        // Show the Lottie container once it's ready
-        document.getElementById('lottie-container').style.opacity = 1;
+        // Reveal the Lottie container once it's ready to avoid initial frame flashes
+        const lottieContainer = document.getElementById('lottie-container');
+        lottieContainer.style.visibility = 'visible';
+        lottieContainer.style.opacity = 1;
     });
 
     // Bind the animation playback to the scroll event
