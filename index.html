@@ -9,23 +9,22 @@
             margin: 0;
             overflow-x: hidden; /* Ensure only vertical scroll is considered */
             background-color: black; /* Set background color to black */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         #lottie-container {
-            position: fixed;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
-            height: 100vh;
-            pointer-events: none;
-        }
-        .scroll-space {
-            height: 300vh; /* Creates enough space for scrolling */
+            height: 100%;
+            max-width: 1920px;
+            max-height: 1080px;
         }
         #menu-bar {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
             height: 7vh; /* Fixed height for the menu bar */
             background-color: black; /* Black menu bar */
             display: flex;
@@ -46,21 +45,25 @@
             height: 5vh; /* Adjust button height as needed */
             margin-left: 10px; /* Space between right buttons */
         }
+        .scroll-space {
+            height: 300vh; /* Creates enough space for scrolling */
+        }
     </style>
 </head>
 <body>
 
-<div id="menu-bar">
-    <div id="menu-left">
-        <img src="1Butt.png" alt="Left Button" class="menu-button">
-    </div>
-    <div id="menu-right">
-        <img src="2Butt.png" alt="Right Button 1" class="menu-button">
-        <img src="3Butt.png" alt="Right Button 2" class="menu-button">
+<div id="lottie-container">
+    <div id="menu-bar">
+        <div id="menu-left">
+            <img src="1Butt.png" alt="Left Button" class="menu-button">
+        </div>
+        <div id="menu-right">
+            <img src="2Butt.png" alt="Right Button 1" class="menu-button">
+            <img src="3Butt.png" alt="Right Button 2" class="menu-button">
+        </div>
     </div>
 </div>
 
-<div id="lottie-container"></div>
 <div class="scroll-space"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
@@ -79,16 +82,11 @@
     // Listener for when the Lottie animation DOM is loaded
     lottieAnimation.addEventListener('DOMLoaded', () => {
         console.log('Lottie animation DOM loaded.');
-    });
-
-    // Listener for when animation frames are ready
-    lottieAnimation.addEventListener('data_ready', () => {
-        console.log('Lottie data is ready, animation frames loaded.');
+        adjustMenuBarWidth(); // Adjust the menu bar width when the animation loads
     });
 
     // Bind the animation playback to the scroll event
     window.addEventListener('scroll', () => {
-        console.log('Scroll event detected inside animation binding.');
         if (lottieAnimation.totalFrames > 0) {
             const scrollTop = window.scrollY || window.pageYOffset;
             const maxScrollTop = document.documentElement.scrollHeight - window.innerHeight;
@@ -103,10 +101,15 @@
         }
     });
 
-    // Listener to check when the animation is completely ready
-    lottieAnimation.addEventListener('complete', () => {
-        console.log('Lottie animation has completed playback.');
-    });
+    // Adjust the width of the menu bar to match the Lottie container
+    function adjustMenuBarWidth() {
+        const lottieContainer = document.getElementById('lottie-container');
+        const menuBar = document.getElementById('menu-bar');
+        menuBar.style.width = `${lottieContainer.clientWidth}px`;
+    }
+
+    // Call the function on resize to ensure it stays matched
+    window.addEventListener('resize', adjustMenuBarWidth);
 </script>
 
 </body>
